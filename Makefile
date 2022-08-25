@@ -1,22 +1,39 @@
-#Compiles the default olaf version for use on traditional computers
-compile:
-	gcc -c src/pffft.c 					-W -Wall -std=gnu11 -pedantic -O2 #pfft needs M_PI and other constants not in the ANSI c standard
-	gcc -c src/midl.c 					-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/mdb.c 					-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/hash-table.c     		-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf.c 					-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_fp_file_writer.c 	-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_db.c 				-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_fp_db_writer.c 		-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_ep_extractor.c 		-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_fp_extractor.c 		-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_reader_stream.c 	-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_runner.c 			-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_stream_processor.c 	-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_fp_matcher.c 		-W -Wall -std=c11 -pedantic -O2
-	gcc -c src/olaf_config.c 			-W -Wall -std=c11 -pedantic -O2
-	mkdir -p bin
-	gcc -o bin/olaf_c *.o 			-lc -lm -ffast-math -pthread
+CFLAGS_WO_STD = -W -Wall -pedantic -g
+CFLAGS = -std=c11 $(CFLAGS_WO_STD)
+
+SRC =	pffft.c 			\
+	midl.c 				\
+	mdb.c 			        \
+	hash-table.c     		\
+	olaf.c 			        \
+	olaf_fp_file_writer.c 	        \
+	olaf_db.c 			\
+	olaf_fp_db_writer.c 		\
+	olaf_ep_extractor.c 		\
+	olaf_fp_extractor.c 		\
+	olaf_reader_stream.c 	        \
+	olaf_runner.c 		        \
+	olaf_stream_processor.c 	\
+	olaf_fp_matcher.c 		\
+	olaf_config.c
+
+OBJ := $(SRC:.c=.o)
+OUTDIR := bin
+EXE := $(OUTDIR)/olaf_c
+
+all: $(EXE)
+
+$(OUTDIR):
+	mkdir -p $(OUTDIR)
+
+$(EXE): $(OBJ) $(OUTDIR)
+	gcc -o $@ *.o 			-lc -lm -ffast-math -pthread
+
+pffft.o: src/pffft.c
+	gcc -c $^ $(CFLAGS_WO_STD) -std=gnu11
+
+%.o: src/%.c
+	gcc -c $^ $(CFLAGS)
 
 #The memory database version is equal to the embedded version
 mem:
