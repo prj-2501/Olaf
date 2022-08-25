@@ -47,8 +47,8 @@ struct match_result{
 	uint64_t result_hash_table_key;
 };
 
-inline int max ( int a, int b ) { return a > b ? a : b; }
-inline int min ( int a, int b ) { return a < b ? a : b; }
+static inline int max ( int a, int b ) { return a > b ? a : b; }
+static inline int min ( int a, int b ) { return a < b ? a : b; }
 
 
 struct Olaf_FP_Matcher{

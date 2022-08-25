@@ -50,7 +50,7 @@ Olaf_DB * olaf_db_new(const char * mdb_folder,bool readonly){
 	//see here:
 	//mdb_env_set_mapsize function in http://www.lmdb.tech/doc/group__mdb.html
 	//
-	size_t max_db_size_in_bytes = (size_t)(1024*1024) * (size_t)(1024*1024);
+	size_t max_db_size_in_bytes = (size_t)(1024*1024) * (size_t)(64*1024);
 
 	e(mdb_env_create(&olaf_db->env));
 	e(mdb_env_set_maxreaders(olaf_db->env, 10));
